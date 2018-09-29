@@ -71,7 +71,7 @@ void octree_write_cpu(const char* path, const octree* grid);
 /// @param paths
 /// @param n_threads number of OpenMP threads used for I/O
 /// @param grid
-void octree_read_batch_cpu(int n_paths, char** paths, int n_threads, octree* grid);
+void octree_read_batch_cpu(const int n_paths, char** paths, int n_threads, octree* grid);
 
 
 /// Writes the given grid-octree as tensor in DHWC format to path.

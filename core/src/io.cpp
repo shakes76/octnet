@@ -295,7 +295,7 @@ void dense_read_prealloc_cpu(const char* path, int n_dim, const int* dims, ot_da
 
 
 extern "C"
-void octree_read_batch_cpu(int n_paths, char** paths, int n_threads, octree* grid_h) {
+void octree_read_batch_cpu(const int n_paths, char** paths, int n_threads, octree* grid_h) {
   if(n_paths <= 0) {
     printf("[ERROR] n_paths <= 0 in octree_read_batch_cpu\n");
     exit(-1);
@@ -308,8 +308,10 @@ void octree_read_batch_cpu(int n_paths, char** paths, int n_threads, octree* gri
 
   //determine necessary memory
   ot_size_t n;
-  ot_size_t n_leafs[n_paths];
-  ot_size_t n_blocks[n_paths];
+  //ot_size_t n_leafs[n_paths];
+  ot_size_t* n_leafs = new ot_size_t[n_paths];
+  //ot_size_t n_blocks[n_paths];
+  ot_size_t* n_blocks = new ot_size_t[n_paths];
 
   FILE* fp = fopen(paths[0], "rb");
   int magic_number = -1;
@@ -409,6 +411,9 @@ void octree_read_batch_cpu(int n_paths, char** paths, int n_threads, octree* gri
       grid_h->prefix_leafs[grid_idx] += n_leafs_offset;
     }
   }
+
+  delete n_leafs;
+  delete n_blocks;
 }
 
 
@@ -419,7 +424,7 @@ void dense_read_prealloc_batch_cpu(int n_paths, char** paths, int n_threads, int
     offset *= dims[dim_idx];
   }
 
-  int dims_single[n_dim];
+  int* dims_single = new int[n_dim];
   dims_single[0] = 1;
   for(int dim_idx = 1; dim_idx < n_dim; ++dim_idx) {
     dims_single[dim_idx] = dims[dim_idx];
@@ -432,5 +437,7 @@ void dense_read_prealloc_batch_cpu(int n_paths, char** paths, int n_threads, int
   for(int path_idx = 0; path_idx < n_paths; ++path_idx) {
     dense_read_prealloc_cpu(paths[path_idx], n_dim, dims_single, data + path_idx * offset);
   }
+
+  delete dims_single;
 }
 

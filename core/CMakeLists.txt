@@ -60,7 +60,11 @@ set(OCTREE_CPU_SRCS
   src/volumetric_upsampling.cpp
 )
 
-add_library(octnet_core SHARED ${OCTREE_CPU_SRCS})
+if(MSVC)
+  add_library(octnet_core STATIC ${OCTREE_CPU_SRCS}) #\todo library is missing dllspec directives
+else(MSVC)
+  add_library(octnet_core SHARED ${OCTREE_CPU_SRCS})
+endif(MSVC)
 
 add_executable(test_octree test/test_octree.cpp)
 target_link_libraries(test_octree octnet_core)
