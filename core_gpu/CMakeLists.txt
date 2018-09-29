@@ -52,7 +52,6 @@ find_package(OctNetCore REQUIRED)
 message(STATUS ${OctNetCore_INCLUDE_DIR})
 message(STATUS ${OctNetCore_LIBRARY})
 include_directories(${OctNetCore_INCLUDE_DIR})
-
 include_directories("include/")
 
 set(OCTREE_GPU_SRCS 
@@ -77,7 +76,7 @@ set(OCTREE_GPU_SRCS
 )
 
 cuda_add_library(octnet_core_gpu SHARED ${OCTREE_GPU_SRCS})
-target_link_libraries(octnet_core_gpu ${OctNetCore_LIBRARY} ${CUDA_LIBRARIES})
+target_link_libraries(octnet_core_gpu ${OctNetCore_LIBRARY} ${CUDA_LIBRARIES} ${CUDA_CUBLAS_LIBRARIES})
 
 # performance tests
 # cuda_add_executable(test_data_idx_speed test/test_data_idx_speed.cu)
